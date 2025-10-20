@@ -1,0 +1,64 @@
+<p-toast></p-toast>
+<div class="card">
+    <h2>{{ isEditMode ? 'Editar Funcionário' : 'Novo Funcionário' }}</h2>
+
+    <form [formGroup]="funcionarioForm" (ngSubmit)="onSubmit()">
+        <div class="p-fluid p-formgrid p-grid">
+            
+            <div class="p-field p-col-12">
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" pInputText formControlName="nome">
+                <small class="p-error" *ngIf="f['nome'].touched && f['nome'].errors?.['required']">
+                    Nome é obrigatório.
+                </small>
+                <small class="p-error" *ngIf="f['nome'].touched && f['nome'].errors?.['minlength']">
+                    O nome deve ter no mínimo 3 caracteres. </small>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6">
+                <label for="email">Email</label>
+                <input id="email" type="text" pInputText formControlName="email">
+                <small class="p-error" *ngIf="f['email'].touched && f['email'].errors?.['required']">
+                    Email é obrigatório.
+                </small>
+                <small class="p-error" *ngIf="f['email'].touched && f['email'].errors?.['email']">
+                    Formato de e-mail inválido. </small>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6">
+                <label for="cargo">Cargo</label>
+                <input id="cargo" type="text" pInputText formControlName="cargo">
+                <small class="p-error" *ngIf="f['cargo'].touched && f['cargo'].errors?.['required']">
+                    Cargo é obrigatório.
+                </small>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6">
+                <label for="salario">Salário</label>
+                <p-inputNumber id="salario" formControlName="salario" mode="currency" 
+                               currency="BRL" locale="pt-BR"> </p-inputNumber>
+                <small class="p-error" *ngIf="f['salario'].touched && f['salario'].errors?.['required']">
+                    Salário é obrigatório.
+                </small>
+                 <small class="p-error" *ngIf="f['salario'].touched && f['salario'].errors?.['min']">
+                    Salário deve ser positivo. </small>
+            </div>
+
+            <div class="p-field p-col-12 p-md-6">
+                <label for="dataAdmissao">Data de Admissão</label>
+                <p-calendar id="dataAdmissao" formControlName="dataAdmissao" 
+                            dateFormat="dd/mm/yy" [maxDate]="maxDate" [showIcon]="true"> </p-calendar>
+                <small class="p-error" *ngIf="f['dataAdmissao'].touched && f['dataAdmissao'].errors?.['required']">
+                    Data de admissão é obrigatória.
+                </small>
+            </div>
+        </div>
+
+        <div class="p-mt-4">
+            <button pButton type="submit" label="Salvar" class="p-mr-2" 
+                    [disabled]="funcionarioForm.invalid"></button>
+            <button pButton type="button" label="Cancelar" class="p-button-secondary" 
+                    routerLink="/funcionarios"></button>
+        </div>
+    </form>
+</div>

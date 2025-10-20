@@ -1,0 +1,65 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<div class="card">
+    <h2>Gestão de Funcionários</h2>
+
+    <div class="grid align-items-end mb-3"> 
+        
+        <div class="field col-12 md:col-4"> 
+            <label for="cargo">Filtrar por Cargo</label>
+            <input id="cargo" type="text" pInputText [(ngModel)]="filtroCargo" 
+                   (input)="carregarFuncionarios()" style="width: 100%;">
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <label for="status">Filtrar por Status</label>
+            <div> <p-selectButton id="status" [options]="statusOptions" [(ngModel)]="filtroStatus" 
+                                optionLabel="label" (onChange)="carregarFuncionarios()">
+                </p-selectButton>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-4" style="text-align: right;"> 
+            <button pButton label="Novo Funcionário" icon="pi pi-plus" 
+                    routerLink="/funcionarios/novo" class="p-button-primary"></button>
+        </div>
+    </div>
+    <p-table [value]="funcionarios()" [loading]="isLoading()" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Cargo</th>
+                <th>Salário</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-func>
+            <tr>
+                <td>{{ func.nome }}</td>
+                <td>{{ func.email }}</td>
+                <td>{{ func.cargo }}</td>
+                <td>{{ func.salario | currency:'BRL' }}</td>
+                <td>
+                    <p-tag [severity]="func.ativo ? 'success' : 'danger'" 
+                           [value]="func.ativo ? 'Ativo' : 'Inativo'"></p-tag>
+                </td>
+                <td>
+                    <button pButton icon="pi pi-pencil" class="p-button-info" 
+                            (click)="editarFuncionario(func.id)"></button>
+                    
+                    <button pButton icon="pi pi-times" class="p-button-danger" 
+                            (click)="inativarFuncionario(func.id)" 
+                            [disabled]="!func.ativo"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">Nenhum funcionário encontrado.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
