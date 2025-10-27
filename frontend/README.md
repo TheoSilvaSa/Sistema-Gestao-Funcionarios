@@ -1,6 +1,11 @@
-# Frontend: Sistema de Gestão de Funcionários
+# Frontend: Sistema de Gestão de Funcionários e Departamentos
 
-Este projeto contém a interface de usuário (UI) para o Sistema de Gestão de Funcionários, desenvolvida com Angular 17.
+Este projeto contém a interface de usuário (UI) para o Sistema de Gestão, incluindo módulos de Funcionários e Departamentos, desenvolvida com Angular 17.
+
+## Módulos
+
+* **Funcionários:** Permite cadastrar, listar (com departamento), editar e inativar funcionários.
+* **Departamentos:** Permite cadastrar, listar, editar e inativar departamentos.
 
 ## Dependências
 
@@ -27,3 +32,9 @@ Este projeto contém a interface de usuário (UI) para o Sistema de Gestão de F
 * **Aplicação:** `http://localhost:4200`
 
 A aplicação irá se conectar automaticamente à API do backend (rodando na porta `8080`).
+
+## Navegação
+
+* Acesse `http://localhost:4200/funcionarios` para o módulo de Funcionários.
+* Acesse `http://localhost:4200/departamentos` para o módulo de Departamentos.
+* Botões de navegação estão disponíveis nas telas de listagem para alternar entre os módulos.
