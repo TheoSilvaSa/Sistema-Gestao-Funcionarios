@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FuncionarioService } from '../../services/funcionario.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FuncionarioRequest } from '../../models/funcionario.model';
-
+import { Departamento, DepartamentoService } from '../../services/departamento.service';
+import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
@@ -18,7 +19,8 @@ import { MessageService } from 'primeng/api';
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
     InputTextModule, InputNumberModule, CalendarModule, 
-    ButtonModule, ToastModule
+    ButtonModule, ToastModule,
+    DropdownModule
   ],
   templateUrl: './funcionario-form.component.html',
   providers: [MessageService]
@@ -30,9 +32,12 @@ export class FuncionarioFormComponent implements OnInit {
   funcionarioId: number | null = null;
   maxDate = new Date();
 
+  departamentosAtivos: WritableSignal<Departamento[]> = signal([]);
+
   constructor(
     private fb: FormBuilder,
     private funcionarioService: FuncionarioService,
+    private departamentoService: DepartamentoService,
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService
@@ -42,11 +47,14 @@ export class FuncionarioFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       cargo: ['', Validators.required],
       salario: [null, [Validators.required, Validators.min(0.01)]],
-      dataAdmissao: [null, Validators.required]
+      dataAdmissao: [null, Validators.required],
+      idDepartamento: [null, Validators.required]
     });
   }
 
   ngOnInit(): void {
+    this.carregarDepartamentosAtivos();
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -57,12 +65,20 @@ export class FuncionarioFormComponent implements OnInit {
     });
   }
 
+  carregarDepartamentosAtivos(): void {
+    this.departamentoService.getDepartamentosAtivos().subscribe(data => {
+      this.departamentosAtivos.set(data);
+    });
+  }
+
   carregarDadosFuncionario(id: number): void {
     this.funcionarioService.getFuncionarioById(id).subscribe(data => {
       const dataAdmissao = new Date(data.dataAdmissao + 'T00:00:00-03:00');
+      
       this.funcionarioForm.patchValue({
         ...data,
-        dataAdmissao: dataAdmissao 
+        dataAdmissao: dataAdmissao,
+        idDepartamento: data.idDepartamento
       });
     });
   }

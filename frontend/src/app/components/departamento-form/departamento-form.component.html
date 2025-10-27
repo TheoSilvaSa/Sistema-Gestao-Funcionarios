@@ -1,0 +1,34 @@
+<p-toast></p-toast>
+<div class="card">
+    <h2>{{ isEditMode ? 'Editar Departamento' : 'Novo Departamento' }}</h2>
+
+    <form [formGroup]="deptoForm" (ngSubmit)="onSubmit()">
+        <div class="p-fluid grid">
+            
+            <div class="field col-12 md:col-6">
+                <label for="nome">Nome do Departamento</label>
+                <input id="nome" type="text" pInputText formControlName="nome"
+                       placeholder="Ex: Financeiro">
+                <small class="p-error" *ngIf="f['nome'].touched && f['nome'].errors?.['required']">
+                    Nome é obrigatório.
+                </small>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label for="sigla">Sigla</label>
+                <input id="sigla" type="text" pInputText formControlName="sigla"
+                       placeholder="Ex: FIN">
+                <small class="p-error" *ngIf="f['sigla'].touched && f['sigla'].errors?.['required']">
+                    Sigla é obrigatória.
+                </small>
+            </div>
+        </div>
+
+        <div class="p-mt-4">
+            <button pButton type="submit" label="Salvar" class="p-mr-2" 
+                    [disabled]="deptoForm.invalid"></button>
+            <button pButton type="button" label="Cancelar" class="p-button-secondary" 
+                    routerLink="/departamentos"></button>
+        </div>
+    </form>
+</div>

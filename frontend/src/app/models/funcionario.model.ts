@@ -6,6 +6,9 @@ export interface Funcionario {
   salario: number;
   dataAdmissao: string;
   ativo: boolean;
+  idDepartamento: number;
+  nomeDepartamento: string;
+  ativoDepartamento: boolean;
 }
 
 export interface FuncionarioRequest {
@@ -14,4 +17,5 @@ export interface FuncionarioRequest {
   cargo: string;
   salario: number;
   dataAdmissao: string;
+  idDepartamento: number;
 }
