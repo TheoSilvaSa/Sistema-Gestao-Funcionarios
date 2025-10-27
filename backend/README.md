@@ -1,11 +1,11 @@
-# Backend: Sistema de Gestão de Funcionários
+# Backend: Sistema de Gestão de Funcionários e Departamentos
 
-Este projeto contém a API REST para o Sistema de Gestão de Funcionários, desenvolvida com Spring Boot.
+Este projeto contém a API REST para o Sistema de Gestão, incluindo módulos de Funcionários e Departamentos, desenvolvida com Spring Boot.
 
 ## Dependências
 
 * Java 17
-* Spring Boot 3.5.6
+* Spring Boot 3.5.6  *(Nota: Usamos 3.3.0 para compatibilidade com Swagger, verifique sua versão no pom.xml)*
 * Spring Data JPA
 * H2 Database (em arquivo)
 * Springdoc OpenAPI (Swagger)
@@ -39,8 +39,18 @@ A documentação completa dos endpoints está disponível via Swagger e pode ser
 * **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**
 
 ## Endpoints
-* `POST /api/funcionarios` - Cadastra um novo funcionário.
-* `GET /api/funcionarios` - Lista/filtra todos os funcionários.
+
+### Funcionários (`/api/funcionarios`)
+* `POST /api/funcionarios` - Cadastra um novo funcionário (vinculado a um departamento).
+* `GET /api/funcionarios` - Lista/filtra todos os funcionários (exibindo o departamento).
 * `GET /api/funcionarios/{id}` - Busca um funcionário por ID.
 * `PUT /api/funcionarios/{id}` - Atualiza um funcionário existente.
 * `PATCH /api/funcionarios/{id}/inativar` - Inativa um funcionário (soft delete).
+
+### Departamentos (`/api/departamentos`)
+* `POST /api/departamentos` - Cria um novo departamento
+* `GET /api/departamentos` - Lista todos os departamentos
+* `GET /api/departamentos/ativos` - Lista apenas os departamentos ativos
+* `GET /api/departamentos/{id}` - Busca um departamento por ID.
+* `PUT /api/departamentos/{id}` - Atualiza dados de um departamento
+* `PATCH /api/departamentos/{id}/inativar` - Inativa um departamento
