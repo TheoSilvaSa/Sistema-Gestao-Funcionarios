@@ -11,7 +11,10 @@ public record FuncionarioResponseDTO(
         String cargo,
         BigDecimal salario,
         LocalDate dataAdmissao,
-        Boolean ativo
+        Boolean ativo,
+        Long idDepartamento,
+        String nomeDepartamento,
+        Boolean ativoDepartamento
 ) {
     public FuncionarioResponseDTO(Funcionario funcionario) {
         this(
@@ -21,7 +24,10 @@ public record FuncionarioResponseDTO(
                 funcionario.getCargo(),
                 funcionario.getSalario(),
                 funcionario.getDataAdmissao(),
-                funcionario.getAtivo()
+                funcionario.getAtivo(),
+                funcionario.getDepartamento().getId(),
+                funcionario.getDepartamento().getNome(),
+                funcionario.getDepartamento().getAtivo()
         );
     }
 }

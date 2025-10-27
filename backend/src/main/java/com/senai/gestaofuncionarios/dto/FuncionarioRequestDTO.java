@@ -3,6 +3,7 @@ package com.senai.gestaofuncionarios.dto;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 
 public record FuncionarioRequestDTO(
         @NotBlank(message = "O nome não pode conter apenas espaços em branco")
@@ -22,6 +23,9 @@ public record FuncionarioRequestDTO(
 
         @NotNull(message = "A data de admissão é obrigatória")
         @PastOrPresent(message = "A data de admissão não pode ser posterior à data atual")
-        LocalDate dataAdmissao
+        LocalDate dataAdmissao,
+
+        @NotNull(message = "O ID do departamento é obrigatório")
+        Long idDepartamento
 ) {
 }
