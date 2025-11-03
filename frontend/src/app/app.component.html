@@ -1,1 +1,5 @@
-<router-outlet></router-outlet>
+<app-header *ngIf="authService.loggedInSignal()"></app-header>
+
+<div class="p-4">
+  <router-outlet></router-outlet>
+</div>

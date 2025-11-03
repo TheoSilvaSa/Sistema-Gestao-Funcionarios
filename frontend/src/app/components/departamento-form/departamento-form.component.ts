@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CanDeactivateComponent } from '../../guards/unsaved-changes.guard';
 
 @Component({
   selector: 'app-departamento-form',
@@ -18,9 +19,9 @@ import { MessageService } from 'primeng/api';
   templateUrl: './departamento-form.component.html',
   providers: [MessageService]
 })
-export class DepartamentoFormComponent implements OnInit {
+export class DepartamentoFormComponent implements OnInit, CanDeactivateComponent {
 
-  deptoForm: FormGroup;
+  form: FormGroup;
   isEditMode = false;
   deptoId: number | null = null;
 
@@ -31,7 +32,7 @@ export class DepartamentoFormComponent implements OnInit {
     private route: ActivatedRoute,
     private messageService: MessageService
   ) {
-    this.deptoForm = this.fb.group({
+    this.form = this.fb.group({
       nome: ['', [Validators.required]],
       sigla: ['', [Validators.required]]
     });
@@ -50,19 +51,19 @@ export class DepartamentoFormComponent implements OnInit {
 
   carregarDadosDepto(id: number): void {
     this.departamentoService.getDepartamentoById(id).subscribe(data => {
-      this.deptoForm.patchValue(data);
+      this.form.patchValue(data);
     });
   }
 
-  get f() { return this.deptoForm.controls; }
+  get f() { return this.form.controls; }
 
   onSubmit(): void {
-    if (this.deptoForm.invalid) {
-      this.deptoForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    const request: DepartamentoRequest = this.deptoForm.value;
+    const request: DepartamentoRequest = this.form.value;
 
     const action = this.isEditMode
       ? this.departamentoService.updateDepartamento(this.deptoId!, request)
@@ -75,6 +76,9 @@ export class DepartamentoFormComponent implements OnInit {
           summary: 'Sucesso', 
           detail: `Departamento ${this.isEditMode ? 'atualizado' : 'criado'}!` 
         });
+        
+        this.form.markAsPristine();
+
         setTimeout(() => this.router.navigate(['/departamentos']), 1500);
       },
       error: (err) => {
@@ -82,5 +86,9 @@ export class DepartamentoFormComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: erroMsg });
       }
     });
+  }
+
+  public hasUnsavedChanges(): boolean {
+    return this.form.dirty;
   }
 }

@@ -1,0 +1,19 @@
+<p-toolbar>
+  <div class="p-toolbar-group-start">
+    <span class="p-toolbar-separator" style="margin-right: 10px;"></span>
+    <button pButton label="Departamentos" icon="pi pi-briefcase" class="p-button-text" 
+            routerLink="/departamentos"></button>
+    <button pButton label="Funcionários" icon="pi pi-users" class="p-button-text" 
+            routerLink="/funcionarios"></button>
+  </div>
+
+  <div class="p-toolbar-group-end">
+    <div class="flex align-items-center" *ngIf="userEmail">
+      <p-avatar icon="pi pi-user" styleClass="mr-2" shape="circle"></p-avatar>
+      <span class="mr-3">{{ userEmail }}</span>
+    </div>
+    
+    <button pButton label="Sair" icon="pi pi-sign-out" class="p-button-danger" 
+            (click)="logout()"></button>
+  </div>
+</p-toolbar>

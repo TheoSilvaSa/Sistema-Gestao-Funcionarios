@@ -1,0 +1,22 @@
+<div class="login-container">
+  <p-card header="Bem-vindo ao Sistema de Gestão" [style]="{width: '360px'}">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="text" pInputText formControlName="email" 
+               placeholder="Digite seu e-mail" style="width: 100%;" />
+        <small class="p-error" *ngIf="f['email'].touched && f['email'].errors?.['required']">
+            Email é obrigatório.
+        </small>
+        <small class="p-error" *ngIf="f['email'].touched && f['email'].errors?.['email']">
+            Formato de e-mail inválido.
+        </small>
+      </div>
+
+      <button pButton type="submit" label="Entrar" icon="pi pi-sign-in" 
+              [disabled]="loginForm.invalid" style="width: 100%;"></button>
+    
+    </form>
+  </p-card>
+</div>

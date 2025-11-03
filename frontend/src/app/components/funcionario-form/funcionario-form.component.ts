@@ -12,6 +12,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CanDeactivateComponent } from '../../guards/unsaved-changes.guard';
 
 @Component({
   selector: 'app-funcionario-form',
@@ -25,9 +26,9 @@ import { MessageService } from 'primeng/api';
   templateUrl: './funcionario-form.component.html',
   providers: [MessageService]
 })
-export class FuncionarioFormComponent implements OnInit {
+export class FuncionarioFormComponent implements OnInit, CanDeactivateComponent {
   
-  funcionarioForm: FormGroup;
+  form: FormGroup;
   isEditMode = false;
   funcionarioId: number | null = null;
   maxDate = new Date();
@@ -42,7 +43,7 @@ export class FuncionarioFormComponent implements OnInit {
     private route: ActivatedRoute,
     private messageService: MessageService
   ) {
-    this.funcionarioForm = this.fb.group({
+    this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       cargo: ['', Validators.required],
@@ -75,7 +76,7 @@ export class FuncionarioFormComponent implements OnInit {
     this.funcionarioService.getFuncionarioById(id).subscribe(data => {
       const dataAdmissao = new Date(data.dataAdmissao + 'T00:00:00-03:00');
       
-      this.funcionarioForm.patchValue({
+      this.form.patchValue({
         ...data,
         dataAdmissao: dataAdmissao,
         idDepartamento: data.idDepartamento
@@ -83,19 +84,19 @@ export class FuncionarioFormComponent implements OnInit {
     });
   }
   
-  get f() { return this.funcionarioForm.controls; }
+  get f() { return this.form.controls; }
 
   onSubmit(): void {
-    if (this.funcionarioForm.invalid) {
-      this.funcionarioForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    const dataAdmissaoISO = (this.funcionarioForm.value.dataAdmissao as Date)
+    const dataAdmissaoISO = (this.form.value.dataAdmissao as Date)
                               .toISOString().split('T')[0];
 
     const request: FuncionarioRequest = {
-      ...this.funcionarioForm.value,
+      ...this.form.value,
       dataAdmissao: dataAdmissaoISO
     };
 
@@ -110,6 +111,9 @@ export class FuncionarioFormComponent implements OnInit {
           summary: 'Sucesso', 
           detail: `Funcionário ${this.isEditMode ? 'atualizado' : 'cadastrado'}!` 
         });
+        
+        this.form.markAsPristine();
+
         setTimeout(() => this.router.navigate(['/funcionarios']), 1500);
       },
       error: (err) => {
@@ -117,5 +121,9 @@ export class FuncionarioFormComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: erroMsg });
       }
     });
+  }
+
+  public hasUnsavedChanges(): boolean {
+    return this.form.dirty;
   }
 }
